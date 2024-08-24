@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Price Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Price Calculator</h1>
+    <form id="priceCalculator">
+        <label for="D2">D2 (Quantity):</label>
+        <input type="number" id="D2" name="D2" required>
+
+        <label for="F2">Select Option (F2):</label>
+        <select id="F2" name="F2" required>
+            <option value="Carify Baku">Carify Baku</option>
+            <option value="Qabil Güləhmədzadə">Qabil Güləhmədzadə</option>
+            <option value="AvtoAl">AvtoAl</option>
+            <option value="Nazim (Qabil)">Nazim (Qabil)</option>
+            <option value="Ümumi">Ümumi</option>
+        </select>
+
+        <label for="currency">Select Currency:</label>
+        <select id="currency" name="currency" required>
+            <option value="USD">USD</option>
+            <option value="EUR">EURO</option>
+            <option value="RUB">RUBL</option>
+            <option value="AZN">AZN</option>
+        </select>
+
+        <button type="button" onclick="calculatePrice()">Calculate</button>
+    </form>
+
+    <h2>Calculated Price: <span id="result">0.00 USD</span></h2>
+    <h3>Exchange Rates:</h3>
+    <p>KRW to USD: <span id="krwToUsdRate">0.0000</span></p>
+    <p>KRW to EUR: <span id="krwToEurRate">0.0000</span></p>
+    <p>KRW to RUB: <span id="krwToRubRate">0.0000</span></p>
+    <p>KRW to AZN: <span id="krwToAznRate">0.0000</span></p>
+    <p>USD to KRW: <span id="usdToKrwRate">0</span></p>
+    <p>EUR to KRW: <span id="eurToKrwRate">0</span></p>
+    <p>RUB to KRW: <span id="rubToKrwRate">0</span></p>
+    <p>AZN to KRW: <span id="aznToKrwRate">0</span></p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const D2Input = document.getElementById('D2');
+            const F2Select = document.getElementById('F2');
+            const currencySelect = document.getElementById('currency');
+
+            async function calculatePrice() {
+                const D2 = parseFloat(D2Input.value);
+                const F2 = F2Select.value;
+                const currency = currencySelect.value;
+
+                if (isNaN(D2) || D2 <= 0) {
+                    document.getElementById('result').textContent = '0.00 ' + currency;
+                    return;
+                }
+
+                try {
+                    // Fetch exchange rates for multiple currencies
+                    const response = await fetch('https://api.exchangerate-api.com/v4/f5106c228dd6e51b2d42b7f5/latest/KRW');
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    const data = await response.json();
+                    
+                    const KRWUSD = data.rates.USD;
+                    const KRWEUR = data.rates.EUR;
+                    const KRWRUB = data.rates.RUB;
+                    const KRWAZN = data.rates.AZN;
+                    
+                    // Update displayed rates
+                    document.getElementById('krwToUsdRate').textContent = KRWUSD.toFixed(4);
+                    document.getElementById('krwToEurRate').textContent = KRWEUR.toFixed(4);
+                    document.getElementById('krwToRubRate').textContent = KRWRUB.toFixed(4);
+                    document.getElementById('krwToAznRate').textContent = KRWAZN.toFixed(4);
+                    
+                    // Conversion based on selected currency
+                    const rateMap = {
+                        'USD': KRWUSD,
+                        'EUR': KRWEUR,
+                        'RUB': KRWRUB,
+                        'AZN': KRWAZN
+                    };
+                    
+                    const selectedRate = rateMap[currency];
+                    const basePrice = D2 * 10000 * selectedRate;
+                    
+                    const feePercent = {
+                        "Carify Baku": basePrice <= 20000 ? 0.05 : 0,
+                        "Qabil Güləhmədzadə": basePrice <= 20000 ? 0.035 : 0.045,
+                        "AvtoAl": basePrice <= 20000 ? 0.035 : 0.045,
+                        "Nazim (Qabil)": basePrice <= 20000 ? 0.03 : 0.04,
+                        "Ümumi": basePrice <= 20000 ? 0.03 : 0.4
+                    }[F2];
+
+                    const extraCharge = {
+                        "Carify Baku": basePrice <= 20000 ? 300 : 0,
+                        "Qabil Güləhmədzadə": basePrice <= 20000 ? 300 : 0,
+                        "AvtoAl": basePrice <= 20000 ? 250 : 0,
+                        "Nazim (Qabil)": basePrice <= 20000 ? 400 : 0,
+                        "Ümumi": basePrice <= 20000 ? 300 : 0
+                    }[F2];
+
+                    const discount = (D2 * 10000 / 1.1) * feePercent;
+                    const price = (D2 * 10000 - discount) * selectedRate + extraCharge;
+
+                    document.getElementById('result').textContent = price.toFixed(2) + ' ' + currency;
+                } catch (error) {
+                    console.error('Error fetching exchange rates:', error);
+                    document.getElementById('result').textContent = 'Error';
+                }
+            }
+
+            // Attach the event listener to inputs and select fields
+            D2Input.addEventListener('input', calculatePrice);
+            F2Select.addEventListener('change', calculatePrice);
+            currencySelect.addEventListener('change', calculatePrice);
+
+            // Calculate price on page load if D2 has a value
+            if (D2Input.value) {
+                calculatePrice();
+            }
+        });
+    </script>
+</body>
+</html>
