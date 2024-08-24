@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Price Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+            background: #fff;
+            padding: 20px;
+            padding-bottom: calc(20px + 10%);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .logo {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .logo a {
+            display: inline-block;
+        }
+        .logo img {
+            max-width: 200px;
+            height: auto;
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        label {
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #900000;
+        }
+        input[type="number"], select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        button {
+            width: 35%;
+            padding: 12px;
+            background-color: #900000;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 20px auto 0;
+            display: block;
+            position: relative;
+	    transform: translateY(20px); /* Move button 10px down */
+        }
+        button:hover {
+            background-color: #6f0000;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .price-container {
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #900000;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #result {
+            color: inherit;
+            padding-right: 40px;
+            position: relative;
+            margin-left: 5px;
+        }
+        #result.error {
+            color: #dc3545;
+        }
+        .checkmark {
+            font-size: 24px;
+            color: #900000;
+            visibility: hidden;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: none;
+        }
+        .checkmark.animate {
+            visibility: visible;
+            animation: checkmark-animation 2s ease;
+        }
+        @keyframes checkmark-animation {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Styles for the language selector dropdown */
+        .language-select {
+            display: flex;
+            justify-content: flex-end; /* Align dropdown to the right */
+            margin-bottom: -30px;
+        }
+        .language-select select {
+            width: 40px; /* Adjust as needed */
+            padding: 2px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 29px; /* Updated font size */
+            background-color: #fff;
+            appearance: none;
+            text-align: center; /* Center align text for better visual appearance */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <a href="https://carify.az" target="_blank" rel="noopener noreferrer">
+                <img src="https://i.imgur.com/2VNOtYi.png" alt="Logo">
+            </a>
+        </div>
+        <h1 id="title">Car Price Calculator</h1>
+        
+        <!-- Language selector -->
+        <div class="language-select">
+            <select id="languageSelect">
+                <option value="en" selected>🇬🇧</option>
+                <option value="ru">🇷🇺</option>
+                <option value="ar">🇦🇪</option>
+                <option value="az">🇦🇿</option>
+                <option value="fr">🇫🇷</option>
+            </select>
+        </div>
+        
+        <form id="priceCalculator">
+            <label for="D2"><span id="labelD2">Car Price</span>:</label>
+            <input type="number" id="D2" name="D2" required>
+
+            <label for="F2"><span id="labelF2">Dealers</span>:</label>
+            <select id="F2" name="F2" required>
+                <option value="Carify Baku">Carify Baku</option>
+                <option value="Qabil Güləhmədzadə">Qabil Güləhmədzadə</option>
+                <option value="AvtoAl">AvtoAl</option>
+                <option value="Nazim (Qabil)">Nazim (Qabil)</option>
+                <option value="Ümumi">Ümumi</option>
+            </select>
+
+            <div class="price-container">
+                <span id="labelPrice">Final Price</span>: <span id="result">$0</span>
+                <div id="checkmark" class="checkmark">&#10003;</div>
+            </div>
+            
+            <button type="button" id="calculateButton">
+                <span id="buttonText">Calculate</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Translations for the button text and labels
+        const translations = {
+            en: {
+                title: 'Car Price Calculator',
+                calculate: 'Calculate',
+                carPrice: 'Car Price',
+                dealers: 'Dealers',
+                finalPrice: 'Final Price'
+            },
+            ru: {
+                title: 'Калькулятор цены автомобиля',
+                calculate: 'Рассчитать',
+                carPrice: 'Цена автомобиля',
+                dealers: 'Дилеры',
+                finalPrice: 'Итоговая цена'
+            },
+            ar: {
+                title: 'حاسبة سعر السيارة',
+                calculate: 'احسب',
+                carPrice: 'سعر السيارة',
+                dealers: 'الوكلاء',
+                finalPrice: 'السعر النهائي'
+            },
+            az: {
+                title: 'Avtomobil Qiyməti Hesablayıcı',
+                calculate: 'Hesabla',
+                carPrice: 'Avtomobil Qiyməti',
+                dealers: 'Dilerlər',
+                finalPrice: 'Son Qiymət'
+            },
+            fr: {
+                title: 'Calculateur de Prix de Voiture',
+                calculate: 'Calculer',
+                carPrice: 'Prix de la Voiture',
+                dealers: 'Concessionnaires',
+                finalPrice: 'Prix Final'
+            }
+        };
+
+        // Function to format numbers with thousands separator and no decimal places
+        const formatNumber = (number) => {
+            return new Intl.NumberFormat().format(Math.floor(number));
+        };
+
+        // Function to update text based on selected language
+        const setText = (lang) => {
+            document.getElementById('title').textContent = translations[lang].title;
+            document.getElementById('labelD2').textContent = translations[lang].carPrice;
+            document.getElementById('labelF2').textContent = translations[lang].dealers;
+            document.getElementById('labelPrice').textContent = translations[lang].finalPrice;
+            document.getElementById('buttonText').textContent = translations[lang].calculate;
+        };
+
+        // Function to calculate price
+        const calculatePrice = async () => {
+            const D2Input = document.getElementById('D2');
+            const F2Select = document.getElementById('F2');
+            const D2 = parseFloat(D2Input.value);
+            const F2 = F2Select.value;
+
+            if (isNaN(D2) || D2 <= 0) {
+                document.getElementById('result').textContent = '$0';
+                document.getElementById('result').classList.add('error');
+                return;
+            }
+
+            let KRWUSD = 1; // Default value in case of invalid dealer selection
+
+            switch (F2) {
+                case "Carify Baku":
+                    KRWUSD = 1.2;
+                    break;
+                case "Qabil Güləhmədzadə":
+                    KRWUSD = 1.15;
+                    break;
+                case "AvtoAl":
+                    KRWUSD = 1.1;
+                    break;
+                case "Nazim (Qabil)":
+                    KRWUSD = 1.05;
+                    break;
+                case "Ümumi":
+                    KRWUSD = 1.0;
+                    break;
+                default:
+                    KRWUSD = 1.0;
+            }
+
+            const result = D2 * KRWUSD;
+            document.getElementById('result').textContent = `$${formatNumber(result)}`;
+            document.getElementById('result').classList.remove('error');
+            document.getElementById('checkmark').classList.add('animate');
+            setTimeout(() => document.getElementById('checkmark').classList.remove('animate'), 2000);
+        };
+
+        // Event listeners
+        document.getElementById('languageSelect').addEventListener('change', (e) => {
+            const lang = e.target.value;
+            setText(lang);
+        });
+
+        document.getElementById('calculateButton').addEventListener('click', calculatePrice);
+
+        // Initialize text
+        setText('en');
+    </script>
+</body>
+</html>
