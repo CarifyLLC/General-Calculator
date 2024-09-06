@@ -6,7 +6,6 @@
     <title>Car Price Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Your existing style */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -340,7 +339,58 @@
                 copiedText: "Copied!",
                 requiredFieldMessage: "This field is required."
             },
-            // Other language translations here...
+            ru: {
+                labelD2: "Aвтомобильная Цена",
+                labelF2: "Дилер",
+                labelPrice: "Цена: ",
+                labelInternetLink: "Cсылка",
+                exchangeRateLabel: "Курс Oбмена:",
+                calculateButtonText: "Рассчитать",
+                error: "Ошибка",
+                result: "Результат",
+                selectDealer: "Выберите Дилера",
+                copiedText: "Скопировано!",
+                requiredFieldMessage: "Это поле обязательно для заполнения."
+            },
+            az: {
+                labelD2: "Əsas Qiymət",
+                labelF2: "Alıcı",
+                labelPrice: "Qiymət: ",
+                labelInternetLink: "Link",
+                exchangeRateLabel: "Məzənnə:",
+                calculateButtonText: "Hesabla",
+                error: "Xəta",
+                result: "Nəticə",
+                selectDealer: "Satıcını Seçin",
+                copiedText: "Kopyalandı!",
+                requiredFieldMessage: "Bu sahə doldurulmalıdır."
+            },
+            fr: {
+                labelD2: "Prix ​​​​de la Voiture",
+                labelF2: "Revendeur",
+                labelPrice: "Prix Final: ",
+                labelInternetLink: "Lien",
+                exchangeRateLabel: "Taux de Change:",
+                calculateButtonText: "Calculer",
+                error: "Erreur",
+                result: "Résultat",
+                selectDealer: "Sélectionnez le Revendeur",
+                copiedText: "Copié!",
+                requiredFieldMessage: "Ce champ est requis."
+            },
+            ar: {
+                labelD2: "سعر السيارة",
+                labelF2: "تاجر",
+                labelPrice: "سعر: ",
+                labelInternetLink: "رابط",
+                exchangeRateLabel: "سعر الصرف:",
+                calculateButtonText: "احسب",
+                error: "خطأ",
+                result: "النتيجة",
+                selectDealer: "اختر تاجر",
+                copiedText: "تم النسخ!",
+                requiredFieldMessage: "هذه الخانة مطلوبه."
+            }
         };
 
         const setLanguage = (lang) => {
@@ -401,12 +451,13 @@
 
         // Function to send data to Google Sheets, including user local timestamp
         const sendDataToGoogleSheet = async (carPrice, dealer, link, calculatedPrice, exchangeRate, calculationId) => {
-            // Format car price and multiply by 10000 if less than 7 digits
-            const carPriceDigits = carPrice.toString().replace(/[^0-9]/g, '').length;
-            const finalCarPrice = carPriceDigits < 7 ? carPrice * 10000 : carPrice;
-            const formattedCarPrice = formatCurrency(finalCarPrice, '₩');
+            // Check if carPrice needs to be converted (less than 7 digits)
+            const numberOfDigits = carPrice.toString().replace(/[^0-9]/g, '').length;
+            const convertedCarPrice = numberOfDigits < 7 ? carPrice * 10000 : carPrice;
 
-            // Format the exchange rate
+            // Format the converted car price to include commas and the currency sign
+            const formattedCarPrice = `₩${formatNumber(convertedCarPrice)}`;
+            const formattedPrice = `$${formatNumber(calculatedPrice)}`;
             const formattedExchangeRate = formatCurrency(exchangeRate, '₩');
 
             // Get user's local time
@@ -414,10 +465,10 @@
 
             // Prepare data object
             const data = {
-                carPrice: formattedCarPrice,
+                carPrice: formattedCarPrice, // Save the converted and formatted price
                 dealer: dealer,
                 link: link,
-                calculatedPrice: `$${formatNumber(calculatedPrice)}`, // Send formatted price
+                calculatedPrice: formattedPrice, // Send formatted calculated price
                 exchangeRate: formattedExchangeRate, // Send formatted exchange rate
                 calculationId: calculationId,
                 timestamp: timestamp // Add the timestamp
@@ -460,7 +511,7 @@
             }
 
             const numberOfDigits = D2.toString().replace(/[^0-9]/g, '').length;
-            const adjustedBasePrice = numberOfDigits < 6 ? D2 * 10000 : D2;
+            const adjustedBasePrice = numberOfDigits < 7 ? D2 * 10000 : D2;
 
             let KRWUSD = 0;
 
