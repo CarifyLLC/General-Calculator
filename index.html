@@ -160,14 +160,14 @@
             appearance: none;
             border: none;
             background: transparent;
-            font-size: 30px;
+            font-size: 20px;
             cursor: pointer;
         }
         .language-selector option {
-            font-size: 16px;
+            font-size: 20px;
         }
         .language-selector .flag {
-            font-size: 36px;
+            font-size: 20px;
         }
         .exchange-rate-container {
             text-align: center;
@@ -182,7 +182,7 @@
         }
         .social-media {
             text-align: center;
-            margin-top: 150px;
+            margin-top: 50px;
         }
         .social-media a {
             margin: 0 15px;
@@ -190,6 +190,44 @@
             color: #900000;
             font-size: 24px;
         }
+	#fetchCalculationForm {
+	    display: flex;
+	    flex-direction: column;
+	    align-items: center; /* Center align the form */
+	    margin-top: 95px; /* Adjust the margin as needed */
+	    margin-bottom: 0px; /* Adjust margin below form as needed */
+	    color: #900000; /* Set the desired text color */
+	}
+
+	#fetchCalculationForm input[type="text"] {
+	    width: 80%; /* Adjust the width of the input */
+	    padding: 10px;
+	    border-radius: 5px;
+	    border: 1px solid #ccc;
+	    font-size: 16px;
+	    margin-bottom: 10px;
+	}
+
+	#fetchCalculationForm button {
+	    padding: 10px 20px;
+	    background-color: #900000; /* Button background color */
+	    color: white; /* Button text color */
+	    border: none;
+	    margin-top: 15px; /* Adjust the margin as needed */
+	    margin-bottom: 0px; /* Adjust margin below form as needed */
+	    border-radius: 8px;
+	    cursor: pointer;
+	    transition: background-color 0.3s ease, transform 0.2s ease;
+	}
+
+	#fetchCalculationForm button:hover {
+	    background-color: #6f0000; /* Button hover effect */
+	}
+
+	#fetchCalculationForm button:active {
+	    transform: scale(0.98);
+	}
+
         .number-pad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -239,15 +277,16 @@
 
         <div class="language-selector">
             <select id="language">
-                <option value="en" class="flag">🇬🇧</option>
-                <option value="ru" class="flag">🇷🇺</option>
                 <option value="az" class="flag">🇦🇿</option>
+		<option value="en" class="flag">🇬🇧</option>
+                <option value="ru" class="flag">🇷🇺</option>
                 <option value="fr" class="flag">🇫🇷</option>
                 <option value="ar" class="flag">🇸🇦</option>
             </select>
         </div>
 
         <h1 id="title"></h1>
+
         <form id="priceCalculator">
             <label for="D2"><span id="labelD2">Car Price</span>:</label>
             <input type="number" id="D2" name="D2" placeholder="" required>
@@ -308,6 +347,13 @@
             <button class="number-pad-button">C</button>
         </div>
 
+	<!-- Fetch Calculation Form moved here -->
+	<form id="fetchCalculationForm">
+	    <label for="fetchCalculationID"><span id="labelFetchCalculationID">Enter ID</span>:</label>
+	    <input type="text" id="fetchCalculationID" name="fetchCalculationID" placeholder="Enter ID">
+            <button type="button" id="fetchButton"><span id="fetchButtonText">Get Info</span></button>
+	</form>
+
         <div class="social-media">
             <a href="https://www.facebook.com/carifyAz" target="_blank" rel="noopener noreferrer" title="Facebook">
                 <i class="fab fa-facebook-f"></i>
@@ -333,6 +379,8 @@
                 labelInternetLink: "Link",
                 exchangeRateLabel: "Exchange Rate:",
                 calculateButtonText: "Calculate",
+	        labelFetchCalculationID: "Enter ID",
+     		fetchButtonText: "Get Info", 
                 error: "Error",
                 result: "Result",
                 selectDealer: "Select Dealer",
@@ -346,6 +394,8 @@
                 labelInternetLink: "Cсылка",
                 exchangeRateLabel: "Курс Oбмена:",
                 calculateButtonText: "Рассчитать",
+        	labelFetchCalculationID: "Введите ID", // Added
+        	fetchButtonText: "Получить информацию", // Added
                 error: "Ошибка",
                 result: "Результат",
                 selectDealer: "Выберите Дилера",
@@ -359,6 +409,8 @@
                 labelInternetLink: "Link",
                 exchangeRateLabel: "Məzənnə:",
                 calculateButtonText: "Hesabla",
+        	labelFetchCalculationID: "ID daxil edin", // Added
+        	fetchButtonText: "Məlumat alın", // Added
                 error: "Xəta",
                 result: "Nəticə",
                 selectDealer: "Satıcını Seçin",
@@ -372,6 +424,8 @@
                 labelInternetLink: "Lien",
                 exchangeRateLabel: "Taux de Change:",
                 calculateButtonText: "Calculer",
+        	labelFetchCalculationID: "Entrez l'ID", // Added
+        	fetchButtonText: "Obtenir l'info", // Added
                 error: "Erreur",
                 result: "Résultat",
                 selectDealer: "Sélectionnez le Revendeur",
@@ -385,6 +439,8 @@
                 labelInternetLink: "رابط",
                 exchangeRateLabel: "سعر الصرف:",
                 calculateButtonText: "احسب",
+        	labelFetchCalculationID: "أدخل المعرف", // Added
+        	fetchButtonText: "احصل على المعلومات", // Added
                 error: "خطأ",
                 result: "النتيجة",
                 selectDealer: "اختر تاجر",
@@ -400,13 +456,15 @@
             document.getElementById('labelInternetLink').textContent = translations[lang].labelInternetLink;
             document.getElementById('exchangeRateLabel').textContent = translations[lang].exchangeRateLabel;
             document.getElementById('calculateButtonText').textContent = translations[lang].calculateButtonText;
+	    document.getElementById('labelFetchCalculationID').textContent = translations[lang].labelFetchCalculationID; // Added
+    	    document.getElementById('fetchButtonText').textContent = translations[lang].fetchButtonText; // Added
         };
 
         document.getElementById('language').addEventListener('change', (event) => {
             setLanguage(event.target.value);
         });
 
-        setLanguage('en');
+        setLanguage('az');
 
         const formatNumber = (number) => new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format(Math.round(number));
         const formatCurrency = (number, symbol) => `${symbol}${formatNumber(number)}`;
@@ -451,30 +509,25 @@
 
         // Function to send data to Google Sheets, including user local timestamp
         const sendDataToGoogleSheet = async (carPrice, dealer, link, calculatedPrice, exchangeRate, calculationId) => {
-            // Check if carPrice needs to be converted (less than 7 digits)
             const numberOfDigits = carPrice.toString().replace(/[^0-9]/g, '').length;
             const convertedCarPrice = numberOfDigits < 7 ? carPrice * 10000 : carPrice;
 
-            // Format the converted car price to include commas and the currency sign
             const formattedCarPrice = `₩${formatNumber(convertedCarPrice)}`;
             const formattedPrice = `$${formatNumber(calculatedPrice)}`;
             const formattedExchangeRate = formatCurrency(exchangeRate, '₩');
 
-            // Get user's local time
-            const timestamp = new Date().toLocaleString(); // Captures user's local timestamp
+            const timestamp = new Date().toLocaleString(); 
 
-            // Prepare data object
             const data = {
-                carPrice: formattedCarPrice, // Save the converted and formatted price
+                carPrice: formattedCarPrice, 
                 dealer: dealer,
                 link: link,
-                calculatedPrice: formattedPrice, // Send formatted calculated price
-                exchangeRate: formattedExchangeRate, // Send formatted exchange rate
+                calculatedPrice: formattedPrice,
+                exchangeRate: formattedExchangeRate, 
                 calculationId: calculationId,
-                timestamp: timestamp // Add the timestamp
+                timestamp: timestamp 
             };
 
-            // Send the data to Google Sheets
             fetch("https://script.google.com/macros/s/AKfycbywLKXUSDZiLmMef4P49AyLkC5WAYFULfXMkxCYY7JrznqU4THbfaxkXYoFCOaLXCwA/exec", {
                 method: "POST",
                 mode: "no-cors",
@@ -583,6 +636,7 @@
                 const F2Select = document.getElementById('F2');
                 const internetLinkInput = document.getElementById('internetLink');
                 const calcIDElement = document.getElementById('calculationID');
+		const fetchCalculationIDInput = document.getElementById('fetchCalculationID');
                 const value = button.textContent;
 
                 if (value === '←') {
@@ -592,6 +646,7 @@
                     F2Select.value = '';
                     internetLinkInput.value = '';
                     calcIDElement.textContent = '0';
+		    fetchCalculationIDInput.value = '';
 
                     document.getElementById('priceContainer').classList.add('hidden');
                     document.getElementById('priceValue').textContent = '$0';
@@ -599,6 +654,47 @@
                     D2Input.value += value;
                 }
             });
+        });
+
+        // Function to fetch data from Google Sheets based on Calculation ID
+        const fetchDataFromGoogleSheet = async (calculationId) => {
+            try {
+                // Make a request to the Google Sheets API (use your Google Sheets URL or API)
+                const response = await fetch("https://script.google.com/macros/s/AKfycbywLKXUSDZiLmMef4P49AyLkC5WAYFULfXMkxCYY7JrznqU4THbfaxkXYoFCOaLXCwA/exec", {
+                    method: "GET",
+                });
+                const data = await response.json();
+
+                // Find the row where the Calculation ID matches
+                const row = data.find(row => row.calculationId == calculationId);
+
+                if (row) {
+                    // Populate the form fields with the data from Google Sheets
+                    document.getElementById('D2').value = row.carPrice;
+                    document.getElementById('internetLink').value = row.link;
+                    document.getElementById('F2').value = row.dealer;
+                    document.getElementById('priceValue').textContent = row.calculatedPrice;
+                    document.getElementById('exchangeRate').textContent = row.exchangeRate;
+                    document.getElementById('calculationID').textContent = row.calculationId;
+
+                    // Make the price container visible
+                    document.getElementById('priceContainer').classList.remove('hidden');
+                } else {
+                    alert('No matching calculation ID found');
+                }
+            } catch (error) {
+                console.error('Error fetching data from Google Sheets:', error);
+            }
+        };
+
+        // Event listener for Fetch button
+        document.getElementById('fetchButton').addEventListener('click', () => {
+            const calculationId = document.getElementById('fetchCalculationID').value.trim();
+            if (calculationId) {
+                fetchDataFromGoogleSheet(calculationId);
+            } else {
+                alert('Please enter a Calculation ID');
+            }
         });
     </script>
 </body>
