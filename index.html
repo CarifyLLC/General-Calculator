@@ -10,11 +10,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Carify Calculator">
 
-    <!-- Cache Control -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-
     <!-- Icon for Web App -->
     <link rel="apple-touch-icon" href="https://i.imgur.com/tzEwnX3.png">
 
@@ -261,7 +256,7 @@
         <div class="language-selector">
             <select id="language">
                 <option value="az" class="flag">🇦🇿</option>
-                <option value="en" class="flag">🇬🇧</option>
+		<option value="en" class="flag">🇬🇧</option>
                 <option value="ru" class="flag">🇷🇺</option>
                 <option value="fr" class="flag">🇫🇷</option>
                 <option value="ar" class="flag">🇸🇦</option>
@@ -283,8 +278,8 @@
             <select id="F2" name="F2" class="hidden-select" hidden required>
                 <option value="" disabled selected>Select Dealer</option>
                 <option value="Ümumi">Ümumi</option>
-                <option value="Qabil Güləhmdzadə" selected>Qabil Güləhmdzadə</option>
-                <option value="Süleyman Yusubov">Süleyman Yusubov</option>
+                <option value="Qabil Güləhmdzadə">Qabil Güləhmdzadə</option>
+                <option value="Süleyman Yusubov" selected>Süleyman Yusubov</option>
                 <option value="Müseyib Məhərrəmli">Müseyib Məhərrəmli</option>
                 <option value="AvtoAL">AvtoAL</option>
                 <option value="Nazim Əliyev">Nazim Əliyev</option>
@@ -635,18 +630,6 @@
                 }
             });
         });
-
-        // Register the service worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                .then((registration) => {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }).catch((error) => {
-                    console.log('ServiceWorker registration failed: ', error);
-                });
-            });
-        }
     </script>
 </body>
 </html>
