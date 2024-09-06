@@ -22,6 +22,233 @@
     <link rel="icon" href="https://i.imgur.com/tzEwnX3.png" sizes="any">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            position: relative;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 0px;
+            background: #fff;
+            padding: 20px;
+            padding-bottom: calc(20px + 10%);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .logo {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .logo a {
+            display: inline-block;
+        }
+        .logo img {
+            max-width: 200px;
+            height: auto;
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+            display: none;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        label {
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #900000;
+        }
+        input[type="number"], input[type="text"], select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 18px;
+        }
+        input.error, select.error {
+            border-color: red;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        button {
+            width: 35%;
+            padding: 12px;
+            background-color: #900000;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 50px auto 0px;
+            display: block;
+            position: relative;
+        }
+        button:hover {
+            background-color: #6f0000;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .hidden {
+            display: none;
+        }
+        .price-container {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: -5px;
+            color: #900000;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+        }
+        #result {
+            display: flex;
+            align-items: center;
+            color: inherit;
+        }
+        #priceValue {
+            color: green;
+            margin-right: 10px;
+            margin-left: 5px;
+        }
+        #result.error {
+            color: #dc3545;
+        }
+        .calculation-id-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-top: 10px;
+            margin-bottom: -5px;
+            color: green;
+            font-weight: bold;
+            width: 100%;
+            position: relative;
+            user-select: text;
+        }
+        #calculationIDLabel {
+            margin-right: 5px;
+            color: #900000;
+        }
+        .language-selector {
+            position: absolute;
+            top: 40px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .language-selector select {
+            appearance: none;
+            border: none;
+            background: transparent;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .language-selector option {
+            font-size: 20px;
+        }
+        .language-selector .flag {
+            font-size: 20px;
+        }
+        .exchange-rate-container {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: -30px;
+            color: #900000;
+        }
+        #exchangeRate {
+            color: #900000;
+        }
+        .social-media {
+            text-align: center;
+            margin-top: 110px;
+        }
+        .social-media a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #900000;
+            font-size: 24px;
+        }
+
+        .number-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 65px;
+            grid-column-gap: 15px;
+            margin-top: -30px;
+            max-width: 240px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .number-pad-button {
+            width: 100%;
+            height: 60px;
+            font-size: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #900000;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .number-pad-button:hover {
+            background-color: #6f0000;
+        }
+        .checkmark {
+            font-size: 18px;
+            color: #900000;
+            margin-left: 5px;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .checkmark.hidden {
+            opacity: 0;
+        }
+        .hidden-select {
+            display: none !important;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -34,7 +261,7 @@
         <div class="language-selector">
             <select id="language">
                 <option value="az" class="flag">🇦🇿</option>
-		        <option value="en" class="flag">🇬🇧</option>
+		<option value="en" class="flag">🇬🇧</option>
                 <option value="ru" class="flag">🇷🇺</option>
                 <option value="fr" class="flag">🇫🇷</option>
                 <option value="ar" class="flag">🇸🇦</option>
@@ -111,6 +338,7 @@
                 <i class="fab fa-instagram"></i>
             </a>
             <a href="https://t.me/Carifyaz" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram"></i></a>
+            </a>
             <a href="https://wa.me/+821072167665" target="_blank" rel="noopener noreferrer">
                 <i class="fab fa-whatsapp"></i>
             </a>
@@ -203,6 +431,7 @@
 
         const formatNumber = (number) => new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format(Math.round(number));
         const formatCurrency = (number, symbol) => `${symbol}${formatNumber(number)}`;
+     
 
 	// Function to generate a random alphanumeric ID with 9 characters (letters and numbers)
         const generateUniqueID = () => {
@@ -214,6 +443,7 @@
             }
             return result;
         };
+
 
         const validateForm = () => {
             let isValid = true;
@@ -261,13 +491,14 @@
             const formattedExchangeRate = formatCurrency(exchangeRate, '₩');
 
             const formatDate = (date) => {
-		        const day = String(date.getDate()).padStart(2, '0');
-		        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    		    const year = date.getFullYear();
-    		    return `${day}/${month}/${year}`;
-	        };
+		const day = String(date.getDate()).padStart(2, '0');
+		const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    		const year = date.getFullYear();
+    		return `${day}/${month}/${year}`;
+	    };
 
-	        const timestamp = formatDate(new Date());
+	    const timestamp = formatDate(new Date());
+ 
 
             const data = {
                 carPrice: formattedCarPrice, 
