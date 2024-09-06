@@ -1,4 +1,4 @@
-const CACHE_NAME = 'carify-app-v1'; // Update this version number when you deploy a new version
+const CACHE_NAME = 'carify-app-v1.1'; // Update this version number when you deploy a new version
 const urlsToCache = [
     '/',
     '/index.html', // Adjust this if your file structure is different
